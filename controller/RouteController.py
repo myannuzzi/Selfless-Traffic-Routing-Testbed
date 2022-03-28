@@ -85,6 +85,18 @@ class RouteController(ABC):
         pass
 
 
+class MyPolicy(RouteController):
+    
+    # Constructor
+    def __init_(self, connection_info):
+        super().__init__(connection_info)
+
+    # algorithm
+    def make_decisions(self, connection_info):
+        print("Using my Algorithm")
+    
+
+
 class RandomPolicy(RouteController):
     """
     Example class for a custom scheduling algorithm.
