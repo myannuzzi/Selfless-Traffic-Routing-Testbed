@@ -10,6 +10,7 @@ from core.Util import *
 from controller.RouteController import *
 from controller.DijkstraController import DijkstraPolicy
 from core.target_vehicles_generation_protocols import *
+import myAlgo
 
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
@@ -55,6 +56,11 @@ def test_dijkstra_policy(vehicles):
     run_simulation(scheduler, vehicles)
 
 
+def test_random_policy(vehicles):
+    print("Testing random algorithm")
+    scheduler = myAlgo.MikeGorithm(init_connection_info)
+    run_simulation(scheduler, vehicles)
+
 def run_simulation(scheduler, vehicles):
 
     simulation = StrSumo(scheduler, init_connection_info, vehicles)
@@ -69,8 +75,8 @@ def run_simulation(scheduler, vehicles):
     print(str(deadlines_missed) + ' deadlines missed.')
 
 if __name__ == "__main__":
-    sumo_binary = checkBinary('sumo-gui')
-    # sumo_binary = checkBinary('sumo')#use this line if you do not want the UI of SUMO
+    # sumo_binary = checkBinary('sumo-gui')
+    sumo_binary = checkBinary('sumo')#use this line if you do not want the UI of SUMO
 
     # parse config file for map file name
     dom = parse("./configurations/myconfig.sumocfg")
@@ -89,4 +95,6 @@ if __name__ == "__main__":
     for vid, v in vehicles.items():
         print("id: {}, destination: {}, start time:{}, deadline: {};".format(vid, \
             v.destination, v.start_time, v.deadline))
-    test_dijkstra_policy(vehicles)
+    # test_dijkstra_policy(vehicles)
+    test_random_policy(vehicles)
+    # test_my_algo(vehicles)

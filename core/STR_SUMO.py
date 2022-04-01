@@ -4,6 +4,8 @@ import optparse
 from xml.dom.minidom import parse, parseString
 from core.Util import *
 from core.target_vehicles_generation_protocols import *
+# CSV for data capture
+import csv
 
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
@@ -49,6 +51,16 @@ class StrSumo:
         Decisions are enforced in SUMO by setting the destination of the vehicle to the result of the
         :returns: total time, number of cars that reached their destination, number of deadlines missed
         """
+        # Create the csv file
+        print("Creating csv file")
+        csvFile = open('/home/mike/RTOS/Selfless-Traffic-Routing-Testbed/data.csv', 'w')
+        
+        # Create the csv writer
+        writer = csv.writer(csvFile)
+        # Write a row
+        row = ["start", "end"]
+        writer.writerow(row)
+
         total_time = 0
         end_number = 0
         deadlines_missed = []
@@ -138,6 +150,9 @@ class StrSumo:
             print(err)
 
         num_deadlines_missed = len(deadlines_missed)
+        # Close the csv file
+        print("Closing csv file...")
+        csvFile.close()
 
         return total_time, end_number, num_deadlines_missed
 
