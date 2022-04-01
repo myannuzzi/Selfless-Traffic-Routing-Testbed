@@ -72,6 +72,7 @@ class MikeGorithm(RouteController):
         decision_list = []
         local_targets = {}
         print("Using Mike's algorithm!")
+        print(str(len(vehicles)))
         print("1. Sorting vehicles")
         # Creating and sorting list outside of function
         # Vehicle ID list
@@ -90,8 +91,13 @@ class MikeGorithm(RouteController):
         vSorted = sorted(vehicles, key= lambda d: d.deadline, reverse=True)
         # for i in range(len(vSorted)):
             # print(vSorted[i])
-
-
+        # Calculate mean deadline
+        meanDeadline = -1
+        sumDeadline = 0
+        for i in vSorted:
+            sumDeadline = sumDeadline + vSorted[i].deadline
+        # meanDeadline = sumDeadline/float()
+        print("MEAN DEADLINE IS: " + str(len(vSorted)))
         for vehicle in vSorted:
             start_edge = vehicle.current_edge
             print("IN THE LOOP")
