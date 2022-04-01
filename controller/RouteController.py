@@ -112,11 +112,10 @@ class RandomPolicy(RouteController):
         :param connection_info: object containing network information
         :return: local_targets: {vehicle_id, target_edge}, where target_edge is a local target to send to TRACI
         """
-
         local_targets = {}
         for vehicle in vehicles:
             start_edge = vehicle.current_edge
-
+            print("{}: current - {}, destination - {}".format(vehicle.vehicle_id, vehicle.current_edge, vehicle.destination))
             '''
             Your algo starts here
             '''

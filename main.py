@@ -59,6 +59,11 @@ def test_dijkstra_policy(vehicles):
 
 def test_random_policy(vehicles):
     print("Testing random algorithm")
+    scheduler = RandomPolicy(init_connection_info)
+    run_simulation(scheduler, vehicles)
+
+def test_Mike_policy(vehicles):
+    print("Testing random algorithm")
     scheduler = myAlgo.MikeGorithm(init_connection_info)
     run_simulation(scheduler, vehicles)
 
@@ -97,4 +102,5 @@ if __name__ == "__main__":
         print("id: {}, destination: {}, start time:{}, deadline: {};".format(vid, \
             v.destination, v.start_time, v.deadline))
     # test_dijkstra_policy(vehicles)
-    test_random_policy(vehicles)
+    # test_random_policy(vehicles)
+    test_Mike_policy(vehicles)

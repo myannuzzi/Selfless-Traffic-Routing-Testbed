@@ -71,9 +71,14 @@ class MikeGorithm(RouteController):
         """
         decision_list = []
         local_targets = {}
-        print("Using Mike's algorithm!")
-        print(str(len(vehicles)))
-        print("1. Sorting vehicles")
+        # print("Using Mike's algorithm!")
+        # Print the vehicles list out
+        # for v in vehicles:
+        #     print("id: " + str(v.vehicle_id) + " destination: " + str(v.destination) + " start time: " + str(v.start_time) + " deadline: " + str(v.deadline)) 
+            # print("id: {}, destination: {}, start time:{}, deadline: {};".format(vid, \
+            # v.destination, v.start_time, v.deadline))
+        
+        # print("1. Sorting vehicles")
         # Creating and sorting list outside of function
         # Vehicle ID list
         # for v in vehicles:
@@ -88,35 +93,38 @@ class MikeGorithm(RouteController):
         # for i in vSorted:
         #     print(str(vSorted[1]))
         # Print the sorted list
-        vSorted = sorted(vehicles, key= lambda d: d.deadline, reverse=True)
+        # vSorted = sorted(vehicles, key= lambda d: d.deadline, reverse=True)
         # for i in range(len(vSorted)):
             # print(vSorted[i])
         # Calculate mean deadline
-        meanDeadline = -1
-        sumDeadline = 0
-        for i in vSorted:
-            sumDeadline = sumDeadline + vSorted[i].deadline
-        # meanDeadline = sumDeadline/float()
-        print("MEAN DEADLINE IS: " + str(len(vSorted)))
-        for vehicle in vSorted:
+        # meanDeadline = -1
+        # sumDeadline = 0
+        # for i in vSorted:
+        #     sumDeadline = sumDeadline + vSorted[i].deadline
+        # # meanDeadline = sumDeadline/float()
+        # print("MEAN DEADLINE IS: " + str(len(vSorted)))
+
+        for vehicle in vehicles:
             start_edge = vehicle.current_edge
-            print("IN THE LOOP")
-            print("Working on vehicle: " + str(vehicle.vehicle_id))
+            # print("IN THE LOOP")
+            # print("Working on vehicle: " + str(vehicle.vehicle_id))
+            # print("id: " + str(vehicle.vehicle_id) + " destination: " + str(vehicle.destination) + " start time: " + str(vehicle.start_time) + " deadline: " + str(vehicle.deadline)) 
             '''
             Your algo starts here
             '''
+            print("{}: current - {}, destination - {}".format(vehicle.vehicle_id, vehicle.current_edge, vehicle.destination))
+            # Grab
+            meanDeadline = 0
+            for vehicle in vehicles:
+                meanDeadline = meanDeadline+vehicle.deadline
+            print("MEAN DEADLINE = " + str(meanDeadline))
+            print("Sort list of vehicles by longest deadline...")
+            vSorted = sorted(vehicles, key= lambda d: d.deadline, reverse=True)
+            # for vehicles in vSorted:
+            #     print(str(vehicle.deadline))
+            # Now that the vehicles are sorted grab the potential next turns
             
-            # Create sorted list of car id's then reference the cars by id when making decisions
-            # First create a copy of the list of car id's
-            
-            # # vehicle_ids = set(vehicles.getIDList())
-            # for v in vehicles:
-            #     # print(vehicle.vehicle_id)
-            #     agent = [v.vehicle_id, v.deadline]
-            #     # print("VEHIClE ID = " + str(agent[0]) + " DEADLINE = " + str(agent[1]))
-            #     vId_list.append(agent)
-            #     # print("VEHIClE ID = " + str(v.vehicle_id) + " DEADLINE = " + str(v.deadline))
-            
+
             # Putting this here for now - Can't test without this
             choice = self.direction_choices[random.randint(0, 5)]
             decision_list.append(choice)
