@@ -38,6 +38,10 @@ class MikeGorithm(RouteController):
     def __init__(self, connection_info):
         super().__init__(connection_info)
 
+    def testFunc():
+        pass
+
+
     def make_decisions(self, vehicles, connection_info):
         """
         A custom scheduling algorithm can be written in between the 'Your algo...' comments.
@@ -70,19 +74,50 @@ class MikeGorithm(RouteController):
         """
         decision_list = []
         local_targets = {}
+        print("Using Mike's algorithm!")
+        print("1. Sorting vehicles")
+        # Creating and sorting list outside of function
+        # Vehicle ID list
+        vId_list = []
+        for v in vehicles:
+            print(v.vehicle_id)
+            agent = [v.vehicle_id, v.deadline]
+            # print("VEHIClE ID = " + str(agent[0]) + " DEADLINE = " + str(agent[1]))
+            vId_list.append(agent)
+            # print("VEHIClE ID = " + str(v.vehicle_id) + " DEADLINE = " + str(v.deadline))
+        # print(vId_list)
+        # Sort list by deadlines
+        # vSorted = vId_list.sort(key=self.getDeadline(vId_list))
+        # for i in vSorted:
+        #     print(str(vSorted[1]))
+        # Print the sorted list
+
+
+
         for vehicle in vehicles:
             start_edge = vehicle.current_edge
 
             '''
             Your algo starts here
             '''
-            print("Using Mike's algorithm!")
-            # Putting this here for now
+            
+            # Create sorted list of car id's then reference the cars by id when making decisions
+            # First create a copy of the list of car id's
+            
+            # # vehicle_ids = set(vehicles.getIDList())
+            # for v in vehicles:
+            #     # print(vehicle.vehicle_id)
+            #     agent = [v.vehicle_id, v.deadline]
+            #     # print("VEHIClE ID = " + str(agent[0]) + " DEADLINE = " + str(agent[1]))
+            #     vId_list.append(agent)
+            #     # print("VEHIClE ID = " + str(v.vehicle_id) + " DEADLINE = " + str(v.deadline))
+            
+            # Putting this here for now - Can't test without this
             choice = self.direction_choices[random.randint(0, 5)]
             decision_list.append(choice)
             '''
             Your algo ends here
             '''
             local_targets[vehicle.vehicle_id] = self.compute_local_target(decision_list, vehicle)
-
+        # print(vId_list)
         return local_targets

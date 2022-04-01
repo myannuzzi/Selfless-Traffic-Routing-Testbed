@@ -31,6 +31,8 @@ RIGHT = "r"
 SLIGHT_LEFT = "L"
 SLIGHT_RIGHT = "R"
 
+# TODO: Create data writing sections to fill csv
+
 class StrSumo:
     def __init__(self, route_controller, connection_info, controlled_vehicles):
         """
