@@ -4,6 +4,7 @@
 import random
 import os
 import sys
+from threading import current_thread
 from core.Util import *
 from controller.RouteController import RouteController
 from core.Util import ConnectionInfo, Vehicle
@@ -118,13 +119,28 @@ class MikeGorithm(RouteController):
             for vehicle in vehicles:
                 meanDeadline = meanDeadline+vehicle.deadline
             print("MEAN DEADLINE = " + str(meanDeadline))
-            print("Sort list of vehicles by longest deadline...")
+            # print("Sort list of vehicles by longest deadline...")
             vSorted = sorted(vehicles, key= lambda d: d.deadline, reverse=True)
             # for vehicles in vSorted:
             #     print(str(vehicle.deadline))
             # Now that the vehicles are sorted grab the potential next turns
-            
-
+            # First get the current edge
+            current_edge = vehicle.current_edge
+            # Grab all the outgoing edges from that key edge
+            # print(str(self.connection_info.outgoing_edges_dict[current_edge]))
+            # print(str(self.connection_info.outgoing_edges_dict))
+            # print(str(current_edge))
+            for vehicle in vSorted:
+                # Create a list of the edge choices
+                edgeChoices = self.connection_info.outgoing_edges_dict[current_edge]
+                # calculate the congestion ratio
+                for i in edgeChoices:
+                    edge_length = self.connection_info.edge_length_dict[i]
+                    print(str(edge_length))
+                # print(str(edgeChoices))
+                # Calculate the time it would take to get from the outgoing edge to the destination (hoping that the directions actually takes us to the destination)
+                # Do this with djikstra's
+                
             # Putting this here for now - Can't test without this
             choice = self.direction_choices[random.randint(0, 5)]
             decision_list.append(choice)
