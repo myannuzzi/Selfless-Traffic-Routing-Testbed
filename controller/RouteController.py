@@ -10,6 +10,7 @@ else:
     sys.exit("No environment variable SUMO_HOME!")
 import traci
 import sumolib
+import controller.algoHelper as algoHelper
 
 STRAIGHT = "s"
 TURN_AROUND = "t"

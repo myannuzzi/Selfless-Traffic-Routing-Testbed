@@ -10,7 +10,8 @@ from core.Util import *
 from controller.RouteController import *
 from controller.DijkstraController import DijkstraPolicy
 from core.target_vehicles_generation_protocols import *
-import myAlgo
+import controller.myAlgo as myAlgo
+import controller.algoHelper as algoHelper
 
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
@@ -97,4 +98,3 @@ if __name__ == "__main__":
             v.destination, v.start_time, v.deadline))
     # test_dijkstra_policy(vehicles)
     test_random_policy(vehicles)
-    # test_my_algo(vehicles)

@@ -1,6 +1,6 @@
 # My traffic routing algorithm
 # Written by Mike Yannuzzi
-from abc import ABC, abstractmethod
+# from abc import ABC, abstractmethod
 import random
 import os
 import sys
@@ -12,6 +12,7 @@ import traci
 import math
 import copy
 import csv
+from controller.algoHelper import getDeadline
 
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
@@ -37,10 +38,6 @@ class MikeGorithm(RouteController):
     """
     def __init__(self, connection_info):
         super().__init__(connection_info)
-
-    def testFunc():
-        pass
-
 
     def make_decisions(self, vehicles, connection_info):
         """
@@ -78,12 +75,11 @@ class MikeGorithm(RouteController):
         print("1. Sorting vehicles")
         # Creating and sorting list outside of function
         # Vehicle ID list
-        vId_list = []
-        for v in vehicles:
-            print(v.vehicle_id)
-            agent = [v.vehicle_id, v.deadline]
+        # for v in vehicles:
+        #     print(v.vehicle_id)
+            # agent = [v.vehicle_id, v.deadline]
             # print("VEHIClE ID = " + str(agent[0]) + " DEADLINE = " + str(agent[1]))
-            vId_list.append(agent)
+            # vId_list.append(agent)
             # print("VEHIClE ID = " + str(v.vehicle_id) + " DEADLINE = " + str(v.deadline))
         # print(vId_list)
         # Sort list by deadlines
@@ -91,12 +87,15 @@ class MikeGorithm(RouteController):
         # for i in vSorted:
         #     print(str(vSorted[1]))
         # Print the sorted list
+        vSorted = sorted(vehicles, key= lambda d: d.deadline, reverse=True)
+        # for i in range(len(vSorted)):
+            # print(vSorted[i])
 
 
-
-        for vehicle in vehicles:
+        for vehicle in vSorted:
             start_edge = vehicle.current_edge
-
+            print("IN THE LOOP")
+            print("Working on vehicle: " + str(vehicle.vehicle_id))
             '''
             Your algo starts here
             '''
@@ -121,3 +120,5 @@ class MikeGorithm(RouteController):
             local_targets[vehicle.vehicle_id] = self.compute_local_target(decision_list, vehicle)
         # print(vId_list)
         return local_targets
+
+    
