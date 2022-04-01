@@ -11,6 +11,8 @@ import numpy as np
 import traci
 import math
 import copy
+import csv
+
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
     sys.path.append(tools)

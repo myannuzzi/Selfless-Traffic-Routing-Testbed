@@ -57,9 +57,11 @@ class StrSumo:
         
         # Create the csv writer
         writer = csv.writer(csvFile)
+        # Header for csv file
+        csv_header = ['vehicle_id','start_time','end_time','deadline','travel_time','deadline_missed','map_name']
         # Write a row
         row = ["start", "end"]
-        writer.writerow(row)
+        writer.writerow(csv_header)
 
         total_time = 0
         end_number = 0
