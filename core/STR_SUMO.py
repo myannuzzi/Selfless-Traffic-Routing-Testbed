@@ -60,9 +60,9 @@ class StrSumo:
         # Create the csv writer
         writer = csv.writer(csvFile)
         # Header for csv file
-        csv_header = ['vehicle_id','start_time','end_time','deadline','travel_time','deadline_missed','map_name']
+        csv_header = ['total_time','end_number','deadlines_missed']
         # Write a row
-        row = ["start", "end"]
+        # row = ["start", "end"]
         writer.writerow(csv_header)
 
         total_time = 0
@@ -154,6 +154,8 @@ class StrSumo:
             print(err)
 
         num_deadlines_missed = len(deadlines_missed)
+        data = [total_time, end_number, num_deadlines_missed]
+        writer.writerow(data)
         # Close the csv file
         print("Closing csv file...")
         csvFile.close()
