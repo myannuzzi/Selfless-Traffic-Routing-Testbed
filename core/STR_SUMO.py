@@ -68,7 +68,8 @@ class StrSumo:
         total_time = 0
         end_number = 0
         deadlines_missed = []
-
+        removed_Vehicles = 0
+        
         step = 0
         vehicles_to_direct = [] #  the batch of controlled vehicles passed to make_decisions()
         vehicle_IDs_in_simulation = []

@@ -80,6 +80,7 @@ class MikeGorithm(RouteController):
         # Sort the vehicles by largest deadline
         vSorted = sorted(vehicles, key= lambda d: d.deadline, reverse=True)
         for vehicle in vSorted:
+            print("MAX SPEED = " + str(traci.vehicle.getMaxSpeed(vehicle.vehicle_id)))
             #print("{}: current - {}, destination - {}".format(vehicle.vehicle_id, vehicle.current_edge, vehicle.destination))
             decision_list = []
             unvisited = {edge: 1000000000 for edge in self.connection_info.edge_list} # map of unvisited edges
