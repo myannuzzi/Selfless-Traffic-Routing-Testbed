@@ -130,17 +130,30 @@ class MikeGorithm(RouteController):
             # print(str(self.connection_info.outgoing_edges_dict[current_edge]))
             # print(str(self.connection_info.outgoing_edges_dict))
             # print(str(current_edge))
+            crList =[]
             for vehicle in vSorted:
                 # Create a list of the edge choices
                 edgeChoices = self.connection_info.outgoing_edges_dict[current_edge]
+                # print(type(edgeChoices))
                 # calculate the congestion ratio
-                for i in edgeChoices:
-                    edge_length = self.connection_info.edge_length_dict[i]
-                    print(str(edge_length))
+                for key, value in edgeChoices.items():
+                    edgeLength = self.connection_info.edge_length_dict[value]
+                    print("EDGE LENGTH = " + str(edgeLength))
+                    # print(str(edgeLength))
+                    carNum = self.connection_info.edge_vehicle_count[value]
+                    print("CAR COUNT = " + str(carNum))
+                    congestionRatio = carNum/edgeLength
+                    print("CONGESTION RATIO = " + str(congestionRatio))
+                    crList.append(congestionRatio)
+                print(str(crList))
+                
                 # print(str(edgeChoices))
                 # Calculate the time it would take to get from the outgoing edge to the destination (hoping that the directions actually takes us to the destination)
                 # Do this with djikstra's
                 
+                # choose between shortest path or least congested lane
+                
+
             # Putting this here for now - Can't test without this
             choice = self.direction_choices[random.randint(0, 5)]
             decision_list.append(choice)
