@@ -76,6 +76,57 @@ class MikeGorithm(RouteController):
         '''
         Your algo starts here
         '''
+        # Starting over because theres no speed value
+        # Sort the vehicles by largest deadline
+        vSorted = sorted(vehicles, key= lambda d: d.deadline, reverse=True)
+        for vehicle in vSorted:
+            #print("{}: current - {}, destination - {}".format(vehicle.vehicle_id, vehicle.current_edge, vehicle.destination))
+            decision_list = []
+            unvisited = {edge: 1000000000 for edge in self.connection_info.edge_list} # map of unvisited edges
+            visited = {} # map of visited edges
+            current_edge = vehicle.current_edge
+
+            current_distance = self.connection_info.edge_length_dict[current_edge]
+            unvisited[current_edge] = current_distance
+            path_lists = {edge: [] for edge in self.connection_info.edge_list} #stores shortest path to each edge using directions
+            while True:
+                if current_edge not in self.connection_info.outgoing_edges_dict.keys():
+                    continue
+                for direction, outgoing_edge in self.connection_info.outgoing_edges_dict[current_edge].items():
+                    if outgoing_edge not in unvisited:
+                        continue
+                    # Get the congestion ratio of the current edge
+                    # number of cars/edge length
+                    edge_length = self.connection_info.edge_length_dict[outgoing_edge]
+                    carNum = self.connection_info.edge_vehicle_count[outgoing_edge]
+                    print("CAR NUM IS: " + str(carNum))
+                    # Calculate congestion ratio
+                    congestionRatio = carNum/edge_length
+                    print("CONGESTION RATIO: " + str(congestionRatio))
+                    # Add the congestion ratio to the current edge length
+                    new_distance = current_distance + edge_length + congestionRatio
+                    # Change the herusitic here for choosing next edge
+                    if new_distance < unvisited[outgoing_edge]:
+                        unvisited[outgoing_edge] = new_distance
+                        current_path = copy.deepcopy(path_lists[current_edge])
+                        current_path.append(direction)
+                        path_lists[outgoing_edge] = copy.deepcopy(current_path)
+                        #print("{} + {} : {} + {}".format(path_lists[current_edge], direction, path_edge_lists[current_edge], outgoing_edge))
+
+                visited[current_edge] = current_distance
+                del unvisited[current_edge]
+                if not unvisited:
+                    break
+                if current_edge==vehicle.destination:
+                    break
+                possible_edges = [edge for edge in unvisited.items() if edge[1]]
+                current_edge, current_distance = sorted(possible_edges, key=lambda x: x[1])[0]
+                #print('{}:{}------------'.format(current_edge, current_distance))
+            #current_edge = vehicle.current_edge
+
+
+
+
         # print("Using Mike's algorithm!")
         # Print the vehicles list out
         # for v in vehicles:
@@ -115,90 +166,90 @@ class MikeGorithm(RouteController):
         
         # print("{}: current - {}, destination - {}".format(vehicle.vehicle_id, vehicle.current_edge, vehicle.destination))
         # Grab
-        meanDeadline = 0
-        for vehicle in vehicles:
-            meanDeadline = meanDeadline+vehicle.deadline
-            print("MEAN DEADLINE = " + str(meanDeadline))
-            # print("Sort list of vehicles by longest deadline...")
-            vSorted = sorted(vehicles, key= lambda d: d.deadline, reverse=True)
-            # for vehicles in vSorted:
-            #     print(str(vehicle.deadline))
-            # Now that the vehicles are sorted grab the potential next turns
-            # First get the current edge
-            current_edge = vehicle.current_edge
-            # Grab all the outgoing edges from that key edge
-            # print(str(self.connection_info.outgoing_edges_dict[current_edge]))
-            # print(str(self.connection_info.outgoing_edges_dict))
-            # print(str(current_edge))
-            crList =[]
-        for vehicle in vSorted:
-            # Perform djikstra's
-            #print("{}: current - {}, destination - {}".format(vehicle.vehicle_id, vehicle.current_edge, vehicle.destination))
-            decision_list = []
-            unvisited = {edge: 1000000000 for edge in self.connection_info.edge_list} # map of unvisited edges
-            visited = {} # map of visited edges
-            current_edge = vehicle.current_edge
+        # meanDeadline = 0
+        # for vehicle in vehicles:
+        #     meanDeadline = meanDeadline+vehicle.deadline
+        #     print("MEAN DEADLINE = " + str(meanDeadline))
+        #     # print("Sort list of vehicles by longest deadline...")
+        #     vSorted = sorted(vehicles, key= lambda d: d.deadline, reverse=True)
+        #     # for vehicles in vSorted:
+        #     #     print(str(vehicle.deadline))
+        #     # Now that the vehicles are sorted grab the potential next turns
+        #     # First get the current edge
+        #     current_edge = vehicle.current_edge
+        #     # Grab all the outgoing edges from that key edge
+        #     # print(str(self.connection_info.outgoing_edges_dict[current_edge]))
+        #     # print(str(self.connection_info.outgoing_edges_dict))
+        #     # print(str(current_edge))
+        #     crList =[]
+        # for vehicle in vSorted:
+        #     # Perform djikstra's
+        #     #print("{}: current - {}, destination - {}".format(vehicle.vehicle_id, vehicle.current_edge, vehicle.destination))
+        #     decision_list = []
+        #     unvisited = {edge: 1000000000 for edge in self.connection_info.edge_list} # map of unvisited edges
+        #     visited = {} # map of visited edges
+        #     current_edge = vehicle.current_edge
 
-            current_distance = self.connection_info.edge_length_dict[current_edge]
-            unvisited[current_edge] = current_distance
-            path_lists = {edge: [] for edge in self.connection_info.edge_list} #stores shortest path to each edge using directions
-            while True:
-                if current_edge not in self.connection_info.outgoing_edges_dict.keys():
-                    continue
-                for direction, outgoing_edge in self.connection_info.outgoing_edges_dict[current_edge].items():
-                    if outgoing_edge not in unvisited:
-                        continue
-                    edge_length = self.connection_info.edge_length_dict[outgoing_edge]
-                    new_distance = current_distance + edge_length
-                    if new_distance < unvisited[outgoing_edge]:
-                        unvisited[outgoing_edge] = new_distance
-                        current_path = copy.deepcopy(path_lists[current_edge])
-                        current_path.append(direction)
-                        path_lists[outgoing_edge] = copy.deepcopy(current_path)
-                        #print("{} + {} : {} + {}".format(path_lists[current_edge], direction, path_edge_lists[current_edge], outgoing_edge))
+        #     current_distance = self.connection_info.edge_length_dict[current_edge]
+        #     unvisited[current_edge] = current_distance
+        #     path_lists = {edge: [] for edge in self.connection_info.edge_list} #stores shortest path to each edge using directions
+        #     while True:
+        #         if current_edge not in self.connection_info.outgoing_edges_dict.keys():
+        #             continue
+        #         for direction, outgoing_edge in self.connection_info.outgoing_edges_dict[current_edge].items():
+        #             if outgoing_edge not in unvisited:
+        #                 continue
+        #             edge_length = self.connection_info.edge_length_dict[outgoing_edge]
+        #             new_distance = current_distance + edge_length
+        #             if new_distance < unvisited[outgoing_edge]:
+        #                 unvisited[outgoing_edge] = new_distance
+        #                 current_path = copy.deepcopy(path_lists[current_edge])
+        #                 current_path.append(direction)
+        #                 path_lists[outgoing_edge] = copy.deepcopy(current_path)
+        #                 #print("{} + {} : {} + {}".format(path_lists[current_edge], direction, path_edge_lists[current_edge], outgoing_edge))
 
-                visited[current_edge] = current_distance
-                del unvisited[current_edge]
-                if not unvisited:
-                    break
-                if current_edge==vehicle.destination:
-                    break
-                possible_edges = [edge for edge in unvisited.items() if edge[1]]
-                current_edge, current_distance = sorted(possible_edges, key=lambda x: x[1])[0]
+        #         visited[current_edge] = current_distance
+        #         del unvisited[current_edge]
+        #         if not unvisited:
+        #             break
+        #         if current_edge==vehicle.destination:
+        #             break
+        #         possible_edges = [edge for edge in unvisited.items() if edge[1]]
+        #         current_edge, current_distance = sorted(possible_edges, key=lambda x: x[1])[0]
 
-                # Grab the congestion ratio
-                # Create a list of the edge choices
-                edgeChoices = self.connection_info.outgoing_edges_dict[current_edge]
-                # print(type(edgeChoices))
-                # calculate the congestion ratio
-                for key, value in edgeChoices.items():
-                    edgeLength = self.connection_info.edge_length_dict[value]
-                    # print("EDGE LENGTH = " + str(edgeLength))
-                    # print(str(edgeLength))
-                    carNum = self.connection_info.edge_vehicle_count[value]
-                    # print("CAR COUNT = " + str(carNum))
-                    congestionRatio = carNum/edgeLength
-                    # print("CONGESTION RATIO = " + str(congestionRatio))
-                    crList.append(congestionRatio)
-                    print(str(crList))
-                    # THERES NO SPEED :(
-                    # Get the speed of the current edge
-                    # speedLimit = self.connection_info.outgoing_edges_dict[current_edge].maxSpeed
-                    # print(str(speedLimit))
+        #         # Grab the congestion ratio
+        #         # Create a list of the edge choices
+        #         edgeChoices = self.connection_info.outgoing_edges_dict[current_edge]
+        #         # print(type(edgeChoices))
+        #         # calculate the congestion ratio
+        #         for key, value in edgeChoices.items():
+        #             edgeLength = self.connection_info.edge_length_dict[value]
+        #             # print("EDGE LENGTH = " + str(edgeLength))
+        #             # print(str(edgeLength))
+        #             carNum = self.connection_info.edge_vehicle_count[value]
+        #             # print("CAR COUNT = " + str(carNum))
+        #             congestionRatio = carNum/edgeLength
+        #             # print("CONGESTION RATIO = " + str(congestionRatio))
+        #             crList.append(congestionRatio)
+        #             print(str(crList))
+        #             # THERES NO SPEED :(
+        #             # Get the speed of the current edge
+        #             # speedLimit = self.connection_info.outgoing_edges_dict[current_edge].maxSpeed
+        #             # print(str(speedLimit))
 
-                # Calculate the shortest path plus the smallest congestion ratio
+        #         # Calculate the shortest path plus the smallest congestion ratio
 
-                # append that choice and value to the list
-                # choose between shortest path or least congested lane
-                # the choices from djikstra's aren't lowering the mean dealine that means there's no better path to choose
-                # To prevent a traffic build up choose the lane with the lowest congestion ratio                                
+        #         # append that choice and value to the list
+        #         # choose between shortest path or least congested lane
+        #         # the choices from djikstra's aren't lowering the mean dealine that means there's no better path to choose
+        #         # To prevent a traffic build up choose the lane with the lowest congestion ratio                                
 
-                # Break out and append choice to choice list
+        #         # Break out and append choice to choice list
 
 
-            # Putting this here for now - Can't test without this
-            choice = self.direction_choices[random.randint(0, 5)]
-            decision_list.append(choice)
+            # # Putting this here for now - Can't test without this
+            # choice = self.direction_choices[random.randint(0, 5)]
+            # decision_list.append(choice)
             '''
             Your algo ends here
             '''
