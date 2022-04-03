@@ -44,6 +44,8 @@ class RouteController(ABC):
     def __init__(self, connection_info: ConnectionInfo):
         self.connection_info = connection_info
         self.direction_choices = [STRAIGHT, TURN_AROUND,  SLIGHT_RIGHT, RIGHT, SLIGHT_LEFT, LEFT]
+        # Create a value for removed vehicles
+        self.gotStuck = 0
 
     def compute_local_target(self, decision_list, vehicle):
         current_target_edge = vehicle.current_edge
@@ -56,12 +58,15 @@ class RouteController(ABC):
                 if current_target_edge == vehicle.destination:
                     break
                 if i >= len(decision_list):
+                    # Increase the removed vehicle count
+                    # self.removed += 1
                     raise UserWarning(
                         "Not enough decisions provided to compute valid local target. TRACI will remove vehicle."
                     )
 
                 choice = decision_list[i]
                 if choice not in self.connection_info.outgoing_edges_dict[current_target_edge]:
+                    # self.removed += 1
                     raise UserWarning(
                             "Invalid direction. TRACI will remove vehicle."
                         )
@@ -71,6 +76,7 @@ class RouteController(ABC):
                 if i > 0:
                     if decision_list[i - 1] == decision_list[i] and decision_list[i] == 't':
                         # stuck in a turnaround loop, let TRACI remove vehicle
+                        self.gotStuck += 1
                         return current_target_edge
 
                 i += 1

@@ -39,6 +39,9 @@ class MikeGorithm(RouteController):
     """
     def __init__(self, connection_info):
         super().__init__(connection_info)
+        self.meanDeadline = []
+        self.simSteps = []
+        self.updatedMean = []
 
     def make_decisions(self, vehicles, connection_info):
         """
@@ -78,9 +81,29 @@ class MikeGorithm(RouteController):
         '''
         # Starting over because theres no speed value
         # Sort the vehicles by largest deadline
+        # print(str(len(vehicles)))
         vSorted = sorted(vehicles, key= lambda d: d.deadline, reverse=True)
+        currentMeanDeadline = 0
+        sumDeadline = 0
+        currentCount = traci.vehicle.getIDCount()
+        # Make sure count is at least 1
+        if currentCount < 1:
+            currentCount =1
+        # print("CURRENT VEHICLE COUNT: " + str(currentCount))
         for vehicle in vSorted:
-            print("MAX SPEED = " + str(traci.vehicle.getMaxSpeed(vehicle.vehicle_id)))
+            # currentCount += 1
+            # print("VEHICLE DEADLINE IS: " + str(vehicle.deadline))
+            sumDeadline = sumDeadline + vehicle.deadline
+            # print("SUM OF DEADLINE: " + str(sumDeadline))
+        
+        currentMeanDeadline = sumDeadline/currentCount
+        # print("MEAN DEADLINE IS: " + str(currentMeanDeadline))
+        # Append the current mean deadline and the sim time to the arrays
+        self.meanDeadline.append(currentMeanDeadline)
+        self.simSteps.append(traci.simulation.getTime())
+        for vehicle in vSorted:
+            maxSpeed = traci.vehicle.getMaxSpeed(vehicle.vehicle_id)
+            # print("MAX SPEED = " + str(maxSpeed))
             #print("{}: current - {}, destination - {}".format(vehicle.vehicle_id, vehicle.current_edge, vehicle.destination))
             decision_list = []
             unvisited = {edge: 1000000000 for edge in self.connection_info.edge_list} # map of unvisited edges
@@ -100,12 +123,30 @@ class MikeGorithm(RouteController):
                     # number of cars/edge length
                     edge_length = self.connection_info.edge_length_dict[outgoing_edge]
                     carNum = self.connection_info.edge_vehicle_count[outgoing_edge]
-                    print("CAR NUM IS: " + str(carNum))
+                    # print("CAR NUM IS: " + str(carNum))
                     # Calculate congestion ratio
                     congestionRatio = carNum/edge_length
-                    print("CONGESTION RATIO: " + str(congestionRatio))
+                    # print("CONGESTION RATIO: " + str(congestionRatio))
                     # Add the congestion ratio to the current edge length
                     new_distance = current_distance + edge_length + congestionRatio
+                    # add the new_distance/vehicle speed to new mean deadline
+                    newDeadline = new_distance/maxSpeed
+                    # copy the list
+                    vCopy = vSorted.copy()
+                    # save the current vehicle id to change its value
+                    idCopy = vehicle.vehicle_id
+                    # Replace the current vehicle id with the new deadline and calc a new mean
+                    for vehicle in vCopy:
+                        if vehicle.vehicle_id == idCopy:
+                            vehicle.deadline = newDeadline
+                    #vCopy.vehicle.deadline = newDeadline
+                    for vehicle in vCopy:
+                        sumDeadline = sumDeadline + vehicle.deadline
+                        # print("SUM OF DEADLINE: " + str(sumDeadline))
+                    currentCount = traci.vehicle.getIDCount()
+                    newMeanDeadline = sumDeadline/currentCount
+                    # Save the new mean
+                    self.updatedMean.append(newMeanDeadline)
                     # Change the herusitic here for choosing next edge
                     if new_distance < unvisited[outgoing_edge]:
                         unvisited[outgoing_edge] = new_distance
@@ -255,6 +296,7 @@ class MikeGorithm(RouteController):
             Your algo ends here
             '''
             local_targets[vehicle.vehicle_id] = self.compute_local_target(decision_list, vehicle)
+
         # print(vId_list)
         return local_targets
 

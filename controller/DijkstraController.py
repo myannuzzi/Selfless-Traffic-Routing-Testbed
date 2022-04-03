@@ -10,7 +10,7 @@ class DijkstraPolicy(RouteController):
 
     def __init__(self, connection_info):
         super().__init__(connection_info)
-
+        self.meanDeadline = []
     def make_decisions(self, vehicles, connection_info):
         """
         make_decisions algorithm uses Dijkstra's Algorithm to find the shortest path to each individual vehicle's destination

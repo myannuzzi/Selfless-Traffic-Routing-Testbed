@@ -3,6 +3,14 @@
 # Written by Mike Yannuzzi
 
 import csv
-import matplotlib as plt
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
-print("Creating graph")
+# Initialize the lists for X and Y
+data = pd.read_csv('/home/mike/RTOS/Selfless-Traffic-Routing-Testbed/mikeData.csv')  
+df = pd.DataFrame(data)
+df.plot()
+# df.plot(kind='scatter', x='time', y='updated_Mean_Deadline', linestyle='solid')
+plt.show()
