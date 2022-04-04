@@ -83,7 +83,7 @@ def test_Mike_policy(vehicles):
     scheduler = myAlgo.MikeGorithm(init_connection_info)
     run_simulation(scheduler, vehicles)
     # print("Vehicles that got stuck: " + str(scheduler.gotStuck))
-    print(str(scheduler.simSteps))
+    # print(str(scheduler.simSteps))
     csvSteps = scheduler.simSteps.copy()
     # print(str(scheduler.meanDeadline))
     # print(str(scheduler.updatedMean))
@@ -140,6 +140,6 @@ if __name__ == "__main__":
     for vid, v in vehicles.items():
         print("id: {}, destination: {}, start time:{}, deadline: {};".format(vid, \
             v.destination, v.start_time, v.deadline))
-    # test_dijkstra_policy(vehicles)
+    test_dijkstra_policy(vehicles)
     # test_random_policy(vehicles)
-    test_Mike_policy(vehicles)
+    # test_Mike_policy(vehicles)
