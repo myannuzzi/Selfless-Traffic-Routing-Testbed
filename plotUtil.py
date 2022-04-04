@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 
 # Initialize the lists for X and Y
-data = pd.read_csv('/home/mike/RTOS/Selfless-Traffic-Routing-Testbed/djikstraData.csv')  
+data = pd.read_csv('/home/mike/RTOS/Selfless-Traffic-Routing-Testbed/mikeData.csv')  
 df = pd.DataFrame(data)
 df.plot()
 # df.plot(kind='scatter', x='time', y='updated_Mean_Deadline', linestyle='solid')
