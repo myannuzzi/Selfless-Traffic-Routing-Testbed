@@ -10,7 +10,7 @@ class DijkstraPolicy(RouteController):
 
     def __init__(self, connection_info):
         super().__init__(connection_info)
-        self.meanDeadline = []
+        self.updatedMean = []
     def make_decisions(self, vehicles, connection_info):
         """
         make_decisions algorithm uses Dijkstra's Algorithm to find the shortest path to each individual vehicle's destination
@@ -18,6 +18,7 @@ class DijkstraPolicy(RouteController):
         :param connection_info: information about the map (roads, junctions, etc)
         """
         local_targets = {}
+        sumDeadline = 0
         for vehicle in vehicles:
             #print("{}: current - {}, destination - {}".format(vehicle.vehicle_id, vehicle.current_edge, vehicle.destination))
             decision_list = []
@@ -36,6 +37,27 @@ class DijkstraPolicy(RouteController):
                         continue
                     edge_length = self.connection_info.edge_length_dict[outgoing_edge]
                     new_distance = current_distance + edge_length
+                    maxSpeed = traci.vehicle.getMaxSpeed(vehicle.vehicle_id)
+                    newDeadline = new_distance/maxSpeed
+                    # Calculate the new mean deadline and save it
+                    # copy the list
+                    vCopy = vehicles.copy()
+                    # save the current vehicle id to change its value
+                    idCopy = vehicle.vehicle_id
+                    # Replace the current vehicle id with the new deadline and calc a new mean
+                    for vehicle in vCopy:
+                        if vehicle.vehicle_id == idCopy:
+                            vehicle.deadline = newDeadline
+                    #vCopy.vehicle.deadline = newDeadline
+                    
+                    for vehicle in vCopy:
+                        sumDeadline = sumDeadline + vehicle.deadline
+                        # print("SUM OF DEADLINE: " + str(sumDeadline))
+                    currentCount = traci.vehicle.getIDCount()
+                    newMeanDeadline = sumDeadline/currentCount
+                    # Save the new mean
+                    self.updatedMean.append(newMeanDeadline)
+
                     if new_distance < unvisited[outgoing_edge]:
                         unvisited[outgoing_edge] = new_distance
                         current_path = copy.deepcopy(path_lists[current_edge])

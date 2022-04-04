@@ -60,7 +60,17 @@ def test_dijkstra_policy(vehicles):
     print("Testing Dijkstra's Algorithm Route Controller")
     scheduler = DijkstraPolicy(init_connection_info)
     run_simulation(scheduler, vehicles)
-    # print("Vehicles that got stuck: " + str(scheduler.gotStuck))
+    # Save Djikstra's data
+    newLength = len(scheduler.updatedMean)
+    xList =[]
+    for i in range(0,newLength):
+        xList.append(i)
+    # print(str(xList))
+    # dict = {'sim_time': scheduler.simSteps, 'mean_deadline': scheduler.meanDeadline, 'updated_Mean_Deadline': scheduler.updatedMean}
+    dict = {'time': xList, 'updated_Mean_Deadline': scheduler.updatedMean}
+    dataFrame = pd.DataFrame(dict)
+    dataFrame.to_csv('djikstraData.csv')
+
 
 def test_random_policy(vehicles):
     print("Testing random algorithm")
@@ -76,10 +86,10 @@ def test_Mike_policy(vehicles):
     print(str(scheduler.simSteps))
     csvSteps = scheduler.simSteps.copy()
     # print(str(scheduler.meanDeadline))
-    print(str(scheduler.updatedMean))
-    print(str(len(scheduler.simSteps)))
-    print(str(len(scheduler.updatedMean)))
-    print(str(len(scheduler.meanDeadline)))
+    # print(str(scheduler.updatedMean))
+    # print(str(len(scheduler.simSteps)))
+    # print(str(len(scheduler.updatedMean)))
+    # print(str(len(scheduler.meanDeadline)))
     # Save these values to a csv file
     # First make sure the length of the arrays is the same
     # make a list as long as the updated mean
@@ -88,7 +98,7 @@ def test_Mike_policy(vehicles):
     xList =[]
     for i in range(0,newLength):
         xList.append(i)
-    print(str(xList))
+    # print(str(xList))
     # dict = {'sim_time': scheduler.simSteps, 'mean_deadline': scheduler.meanDeadline, 'updated_Mean_Deadline': scheduler.updatedMean}
     dict = {'time': xList, 'updated_Mean_Deadline': scheduler.updatedMean}
     dataFrame = pd.DataFrame(dict)
@@ -130,6 +140,6 @@ if __name__ == "__main__":
     for vid, v in vehicles.items():
         print("id: {}, destination: {}, start time:{}, deadline: {};".format(vid, \
             v.destination, v.start_time, v.deadline))
-    # test_dijkstra_policy(vehicles)
+    test_dijkstra_policy(vehicles)
     # test_random_policy(vehicles)
-    test_Mike_policy(vehicles)
+    # test_Mike_policy(vehicles)
