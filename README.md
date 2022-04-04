@@ -1,3 +1,6 @@
+***Update to run MikeGorithm***
+To run my code first install SUMO with the instructions below being sure to add your home enviroment variable. To run a simulation be sure to first check the map name is the myconfig.sumocfg file. All of the maps are in the proper directory so you only need to change the name of the file. After running the sim (mine is gui-less to prevent traci server issues) a csv file is saved. You can plot this file with the plotUtil.py file. Just change the file path for the csv file and the title of the graph. If you have any questions please email me at mikeyannuzzi321@gmail.com :)
+
 ***Selfless Traffic Routing testbed based on SUMO (STR-SUMO)***
 
 This project is built based on SUMO (https://sumo.dlr.de/docs/index.html#introduction), which offers a traffic simulation platform.
