@@ -9,8 +9,8 @@ import numpy as np
 import pandas as pd
 
 # Initialize the lists for X and Y
-data = pd.read_csv('/home/mike/RTOS/Selfless-Traffic-Routing-Testbed/djikstraData.csv')  
+data = pd.read_csv('/home/mike/RTOS/Selfless-Traffic-Routing-Testbed/mikeData.csv')  
 df = pd.DataFrame(data)
-df.plot(title='Complex Map 1 - Djikstra''s Algorithm')
+df.plot(title='Test Net - Mike''s Algorithm')
 # df.plot(kind='scatter', x='time', y='updated_Mean_Deadline', linestyle='solid')
 plt.show()
